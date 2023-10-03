@@ -11,7 +11,9 @@ export default function Home() {
         name={"Nguyễn Văn A"}
       />
       <div>
-        
+        <div>
+          
+        </div>
       </div>
     </main>
   )

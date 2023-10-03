@@ -1,12 +1,20 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { Popover } from 'antd';
 
 const NaviBar = (props) => {
   const [toggleMenu, setToggleMenu] = useState(false);
 
+  const content = (
+    <div>
+      <Link className="block" href="/profile/personal-info">Manage Personal Info</Link>
+      <Link className="block" href="/profile/change-password">Change Password</Link>
+    </div>
+  );
+
   return (
-    <div className={`relative bg-[#8EACBB] flex flex-col justify-between min-h-screen w-1/5 ${toggleMenu ? "max-w-[48px] p-[12px]" : "min-w-[275px] p-[24px]"}`}>
+    <div className={`relative bg-[#8EACBB] flex flex-col justify-between min-h-screen w-1/5 ${toggleMenu ? "max-w-[48px] p-[12px]" : "min-w-[300px] p-[24px]"}`}>
       <div className="flex flex-col items-center">
         {!toggleMenu && <Image src="/svg/logo-alt.svg" width={140} height={140} alt=""/>}
         {!toggleMenu && <div className="w-full bg-[#FAF2E3] h-[1px] mt-[36px]"></div> }
@@ -54,8 +62,12 @@ const NaviBar = (props) => {
           <Image src={props.avatar} width={42} height={42} alt="" className="rounded-full"/>
           {!toggleMenu && <span className="text-[#FAF2E3] font-semibold">{props.name}</span>}
         </div>
-        {!toggleMenu &&<Image src={"/svg/settings.svg"} width={24} height={24} alt="" /> }
-        {!toggleMenu &&<Image src={"/svg/sign-out.svg"} width={24} height={24} alt="" /> }
+        {!toggleMenu && 
+          <Popover className="cursor-pointer" content={content} trigger="hover">
+            <Image src={"/svg/settings.svg"} width={24} height={24} alt="" />
+          </Popover> 
+        }
+        {!toggleMenu && <Image src={"/svg/sign-out.svg"} width={24} height={24} alt="" /> }
       </div>
 
       <Image 
