@@ -1,5 +1,5 @@
 import Image from "next/image";
-import styles from "@/styles/LoginPage.module.scss"
+import styles from "src/styles/LoginPage.module.scss"
 import { Button, Input, Space } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 

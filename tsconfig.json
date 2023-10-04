@@ -21,7 +21,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "src/pages/staffs/index.jsx", "src/pages/product-catalogue/index.jsx"  ],
   "exclude": [
     "node_modules"
   ]

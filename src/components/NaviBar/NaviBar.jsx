@@ -20,39 +20,39 @@ const NaviBar = (props) => {
         {!toggleMenu && <div className="w-full bg-[#FAF2E3] h-[1px] mt-[36px]"></div> }
         <div className="mt-[24px] w-full">
           <Link 
-            className="flex w-full gap-[5px] text-[#FAF2E3] my-[12px] font-semibold"
+            className="flex w-full gap-[5px] text-[#FAF2E3] my-[12px] font-semibold group"
             href="#"
           >
             <Image src={"/svg/product-logo.svg"} width={24} height={24} alt=""/>
-            {!toggleMenu && <span>Product Catalogue</span>} 
+            {!toggleMenu && <span className="group-hover:translate-x-1 transition">Product Catalogue</span>} 
           </Link>
           <Link 
-            className="flex w-full gap-[5px] text-[#FAF2E3] my-[12px] font-semibold"
+            className="flex w-full gap-[5px] text-[#FAF2E3] my-[12px] font-semibold group"
             href="#"
           >
             <Image src={"/svg/customer-logo.svg"} width={24} height={24} alt=""/>
-            {!toggleMenu && <span>Staffs</span> }
+            {!toggleMenu && <span className="group-hover:translate-x-1 transition ">Staffs</span> }
           </Link>
           <Link 
-            className="flex w-full gap-[5px] text-[#FAF2E3] my-[12px] font-semibold"
+            className="flex w-full gap-[5px] text-[#FAF2E3] my-[12px] font-semibold group"
             href="#"
           >
             <Image src={"/svg/staff-logo.svg"} width={24} height={24} alt=""/>
-            {!toggleMenu && <span>Customers</span> }
+            {!toggleMenu && <span className="group-hover:translate-x-1 transition">Customers</span> }
           </Link>
           <Link 
-            className="flex w-full gap-[5px] text-[#FAF2E3] my-[12px] font-semibold"
+            className="flex w-full gap-[5px] text-[#FAF2E3] my-[12px] font-semibold group"
             href="#"
           >
             <Image src={"/svg/transaction-logo.svg"} width={24} height={24} alt=""/>
-            {!toggleMenu && <span>Transaction Processing</span> }
+            {!toggleMenu && <span className="group-hover:translate-x-1 transition">Transaction Processing</span> }
           </Link>
           <Link 
-            className="flex w-full gap-[5px] text-[#FAF2E3] my-[12px] font-semibold"
+            className="flex w-full gap-[5px] text-[#FAF2E3] my-[12px] font-semibold group"
             href="#"
           >
             <Image src={"/svg/report-logo.svg"} width={24} height={24} alt=""/>
-            {!toggleMenu && <span>Report and Analytics</span> }
+            {!toggleMenu && <span className="group-hover:translate-x-1 transition">Report and Analytics</span> }
           </Link>
         </div>
       </div>
@@ -71,7 +71,7 @@ const NaviBar = (props) => {
       </div>
 
       <Image 
-        className={`absolute right-[-20px] top-[48px] cursor-pointer ${toggleMenu ? "rotate-180" : ""}`}
+        className={`absolute right-[-20px] top-[48px] cursor-pointer hover:scale-110 transition duration-300 ${toggleMenu ? "rotate-180" : ""}`}
         src={"/svg/navi-toggle-btn.svg"}
         width={36}
         height={36}

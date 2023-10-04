@@ -1,5 +1,5 @@
 import Image from "next/image";
-import NaviBar from "@/components/NaviBar/NaviBar";
+import NaviBar from "src/components/NaviBar/NaviBar";
 import { Input, Button } from "antd";
 import { useState } from "react";
 

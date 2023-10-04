@@ -1,5 +1,5 @@
 import Image from "next/image";
-import NaviBar from "@/components/NaviBar/NaviBar";
+import NaviBar from "src/components/NaviBar/NaviBar";
 import { Input, Upload, Button, notification, Form } from "antd";
 import { LoadingOutlined, PlusOutlined} from '@ant-design/icons';
 import { useState } from "react";
