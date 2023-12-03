@@ -76,7 +76,10 @@ const NaviBar = (props) => {
         width={36}
         height={36}
         alt=""
-        onClick={() => setToggleMenu(!toggleMenu)}
+        onClick={() => {
+          setToggleMenu(!toggleMenu)
+          props.onToggle;
+        }}
       />
     </div>
   )
