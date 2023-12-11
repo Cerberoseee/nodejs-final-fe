@@ -41,7 +41,8 @@ const Staffs = () => {
         setTotalPage(res.total_page);
         setLoading(false);
       })
-    } else {
+    } else 
+    {
        AccountApi.listByName({page: page, limit: 8, name: debounceValue}).then((res) => {
         setData(res.data);
         setTotalPage(res.total_page);
@@ -49,6 +50,10 @@ const Staffs = () => {
       })
     }
   }, [page, debounceValue])
+
+  useEffect(() => {
+    setPage(1);
+  }, [debounceValue])
 
   const router = useRouter();
 
@@ -105,7 +110,7 @@ const Staffs = () => {
             <Image 
               className="cursor-pointer" 
               onClick={() => {
-                router.push("/staffs/" + item.id)
+                router.push("/staffs/" + item._id)
               }} 
               alt="" 
               src={"/svg/redirect.svg"} 
@@ -236,7 +241,7 @@ const Staffs = () => {
               prefix={<SearchOutlined size={12}/>}
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)} 
-              placeholder="Find Staffs via ID / Name"
+              placeholder="Find Staffs via Username / Fullname"
             />
             <Button
               icon={<PlusOutlined size={12}/>}

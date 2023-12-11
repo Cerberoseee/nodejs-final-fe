@@ -51,7 +51,7 @@ const ChangePassword = () => {
 
   return (
     <main className={`flex min-h-screen bg-[#FAF2E3]`}>
-      <NaviBar onToggle={() => {}} avatar={!!user.avatarPath ? getStorageUrl() + user.avatarPath : "/avatar-placeholder.jpg"} name={user.fullName} />
+      <NaviBar onToggle={() => {}} avatar={!!user?.avatarPath ? getStorageUrl() + user.avatarPath : "/avatar-placeholder.jpg"} name={user?.fullName} />
       <div className="p-[32px] w-full">
         <h1 className="font-bold text-2xl mb-[24px]">Change Password</h1>
 

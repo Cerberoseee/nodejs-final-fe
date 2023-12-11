@@ -23,7 +23,7 @@ export default function App({ Component, pageProps }) {
 
   useEffect(() => {
     authenticateRoute();
-  }, [])
+  }, [router.pathname])
 
   return !loading ? (
     <>

@@ -141,6 +141,22 @@ const unlockAccount = async (params) => {
   return null;
 }
 
+const getById = async (params) => {
+  const url = `/account/list/${params.id}`;
+
+  let req = await Api.get(url, 
+    {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem("token")}` 
+      }
+    }
+  );
+  if (req.data) {
+    return req.data;
+  }
+  return null;
+}
+
 const AccountApi = {
   list,
   add,
@@ -148,7 +164,8 @@ const AccountApi = {
   deleteAccount,
   listByName,
   lockAccount,
-  unlockAccount
+  unlockAccount,
+  getById
 }
 
 export default AccountApi;
