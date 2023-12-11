@@ -13,7 +13,10 @@ const login = async (params) => {
       let {
         token
       } = req.data;
-      if (token) localStorage.setItem("token", token);
+      if (token) {
+        localStorage.setItem("token", token);
+        await getMe();
+      }
     }
     return req.data;
   }
@@ -29,10 +32,12 @@ const verifyLogin =  async () => {
       }
     }
   );
-  console.log(req);
   if (req.data.result == 'success') {
     return true;
   }
+
+  localStorage.removeItem("token")
+  localStorage.removeItem("user")
   return false;
 };
 

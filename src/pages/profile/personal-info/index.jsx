@@ -14,18 +14,16 @@ const getBase64 = (img , callback) => {
 };
 
 const PersonalInfo = () => {
+  const router = useRouter();
+
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(false);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   
-  const router = useRouter();
-
   useEffect(() => {
-    AuthApi.getMe().then(() => {
-      setUser(JSON.parse(localStorage.getItem("user")));
-    })
+    setUser(JSON.parse(localStorage.getItem("user") || "{}"))
   }, [])
 
   useEffect(() => {
