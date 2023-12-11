@@ -4,8 +4,12 @@ import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import NaviBar from 'src/components/NaviBar';
 import Image from "next/image"
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 
-const ProductCatalog = () => {
+
+const TransactionList = () => {
+  const router = useRouter();
+
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [toggleMenu, setToggleMenu] = useState(true);
@@ -106,15 +110,15 @@ const ProductCatalog = () => {
   return (
     <>
       <Head>
-        <title>Product Catalogue Management</title>
+        <title>Transaction Management</title>
       </Head>
       <main className={`flex min-h-screen bg-[#FAF2E3]`}>
         <NaviBar onToggle={() => setToggleMenu(!toggleMenu)} avatar={"/avatar-placeholder.jpg"} name={"Nguyễn Văn A"} />
         <div className={`p-[32px]`} style={{ width: 'calc(100% - ' + (!toggleMenu ? '50px' : '300px') + ')' }}>
-          <h1 className="font-bold text-2xl mb-[24px]">Product Catalog Management</h1>
+          <h1 className="font-bold text-2xl mb-[24px]">Transactions Management</h1>
           <div className="flex justify-between gap-[12px] mb-[24px]">
             <Input
-              placeholder="Find product by name or barcode"
+              placeholder="Find transaction by barcode"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               prefix={<SearchOutlined />}
@@ -124,9 +128,9 @@ const ProductCatalog = () => {
               type="primary"
               icon={<PlusOutlined />}
               style={{ marginLeft: 8 }}
-              onClick={() => setAddProductModalVisible(true)} // Open the add product modal
+              onClick={() => router.push("/transactions/add")} // Open the add product modal
             >
-              Add new product
+              Add new transaction
             </Button>
           </div>
           <Table  scroll={{ x: "max-content" }} dataSource={products} columns={columns} />
@@ -238,6 +242,6 @@ const ProductCatalog = () => {
     </>
 
   );
-};
+}
 
-export default ProductCatalog;
+export default TransactionList;

@@ -2,6 +2,10 @@
   "name": "final-nodejs-fe",
   "version": "0.1.0",
   "private": true,
+  "browser": {
+    "fs": false,
+    "child_process": false
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -12,9 +16,15 @@
     "@ant-design/icons": "^5.2.6",
     "@uidotdev/usehooks": "^2.3.1",
     "antd": "^5.9.4",
+    "axios": "^1.6.2",
+    "dotenv": "^16.3.1",
     "next": "13.5.4",
+    "nextjs-progressbar": "^0.0.16",
+    "qs": "^6.11.2",
+    "quagga": "^0.12.1",
     "react": "^18",
     "react-dom": "^18",
+    "react-loading-icons": "^1.1.0",
     "sass": "^1.68.0"
   },
   "devDependencies": {

@@ -1,8 +1,11 @@
 import Image from "next/image";
-import NaviBar from "src/components/NaviBar/NaviBar";
-import { Input, Upload, Button, notification, Form } from "antd";
+import NaviBar from "src/components/NaviBar";
+import { Input, Upload, Button, notification, Form, message } from "antd";
 import { LoadingOutlined, PlusOutlined} from '@ant-design/icons';
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {getStorageUrl} from "src/misc"
+import AuthApi from "../../../services/auth";
+import { useRouter } from "next/router";
 
 const getBase64 = (img , callback) => {
   const reader = new FileReader();
@@ -11,10 +14,25 @@ const getBase64 = (img , callback) => {
 };
 
 const PersonalInfo = () => {
+  const [user, setUser] = useState({});
   const [loading, setLoading] = useState(false);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  
+  const router = useRouter();
+
+  useEffect(() => {
+    AuthApi.getMe().then(() => {
+      setUser(JSON.parse(localStorage.getItem("user")));
+    })
+  }, [])
+
+  useEffect(() => {
+    setImageUrl(!!user.avatarPath ? getStorageUrl() + user.avatarPath : "");
+    setFullName(user.fullName);
+    setEmail(user.email);
+  }, [user])
 
   const beforeUpload = (file) => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -55,22 +73,38 @@ const PersonalInfo = () => {
   };
 
   const [form] = Form.useForm();
-  const onFinish = (value) => {
+  const onFinish = async (value) => {
     console.log(value);
+    const res = await AuthApi
+    .update({...value, email: email, fullName: fullName})
+    .catch((err) => {
+      if (err.response.data.message?.msg) {
+        message.error(err.response.data.message.msg);
+      }
+    });
+    if (res) {
+      message.success("Updated success!");
+      setTimeout(() => router.reload(), 2000);
+    } else {
+      message.error("Updated failed!");
+    }
   }
 
   return (
     <main className={`flex min-h-screen bg-[#FAF2E3]`}>
-      <NaviBar avatar={"/avatar-placeholder.jpg"} name={"Nguyễn Văn A"} />
+      <NaviBar onToggle={() => {}} avatar={!!user.avatarPath ? getStorageUrl() + user.avatarPath : "/avatar-placeholder.jpg"} name={user.fullName} />
       <div className="p-[32px] w-full">
         <h1 className="font-bold text-2xl mb-[24px]">Account Information</h1>
-
         <div className="bg-white rounded-[4px] p-[16px] w-full">
           <Form 
             form={form}
             layout="vertical"
             onFinish={onFinish}
             requiredMark={false}
+            initialValues={{
+              fullName: fullName,
+              email: email
+            }}
           >        
             <Form.Item 
               name="avatar"
@@ -107,23 +141,17 @@ const PersonalInfo = () => {
               </Upload>
             </Form.Item>
               
-            <Form.Item 
-              name="fullName"
-              className={"mb-[24px]"}
-              label={
-                 <p className="mb-[12px] font-semibold">Fullname *</p>
-              } 
-              rules={[
-                { required: true, message: 'Please enter your fullname!' }
-              ]}
-            >
+            <div className="mb-[24px]">
+              <p className="mb-[12px] font-semibold">Fullname *</p>
+
               <Input
                 placeholder="Enter fullname"
                 size="large"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
               />
-            </Form.Item>
+            </div>
+              
 
             <div className="mb-[24px]">
               <p className="mb-[12px] font-semibold">Email *</p>
@@ -143,7 +171,7 @@ const PersonalInfo = () => {
           color="#5FBFEF"
           style={{borderColor: '#5FBFEF'}} 
           size="large" 
-          className="mt-[24px] ml-auto block w-fit font-semibold text-[#5FBFEF]"
+          className="mt-[24px] ml-auto block w-fit font-semibold"
         >
           Save changes
         </Button>

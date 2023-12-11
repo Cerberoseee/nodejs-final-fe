@@ -2,9 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { Popover } from 'antd';
+import { useRouter } from "next/router";
 
 const NaviBar = (props) => {
   const [toggleMenu, setToggleMenu] = useState(false);
+  const router = useRouter();
 
   const content = (
     <div>
@@ -20,35 +22,35 @@ const NaviBar = (props) => {
         {!toggleMenu && <div className="w-full bg-[#FAF2E3] h-[1px] mt-[36px]"></div> }
         <div className="mt-[24px] w-full">
           <Link 
-            className="flex w-full gap-[5px] text-[#FAF2E3] my-[12px] font-semibold group"
-            href="#"
+            className="flex w-full gap-[5px] text-[#FAF2E3] my-[12px] font-semibold group items-center"
+            href="/product-catalogue"
           >
             <Image src={"/svg/product-logo.svg"} width={24} height={24} alt=""/>
             {!toggleMenu && <span className="group-hover:translate-x-1 transition">Product Catalogue</span>} 
           </Link>
           <Link 
-            className="flex w-full gap-[5px] text-[#FAF2E3] my-[12px] font-semibold group"
-            href="#"
+            className="flex w-full gap-[5px] text-[#FAF2E3] my-[12px] font-semibold group items-center"
+            href="/staffs"
           >
             <Image src={"/svg/customer-logo.svg"} width={24} height={24} alt=""/>
             {!toggleMenu && <span className="group-hover:translate-x-1 transition ">Staffs</span> }
           </Link>
           <Link 
-            className="flex w-full gap-[5px] text-[#FAF2E3] my-[12px] font-semibold group"
-            href="#"
+            className="flex w-full gap-[5px] text-[#FAF2E3] my-[12px] font-semibold group items-center"
+            href="/customers"
           >
             <Image src={"/svg/staff-logo.svg"} width={24} height={24} alt=""/>
             {!toggleMenu && <span className="group-hover:translate-x-1 transition">Customers</span> }
           </Link>
           <Link 
-            className="flex w-full gap-[5px] text-[#FAF2E3] my-[12px] font-semibold group"
-            href="#"
+            className="flex w-full gap-[5px] text-[#FAF2E3] my-[12px] font-semibold group items-center"
+            href="/transactions"
           >
             <Image src={"/svg/transaction-logo.svg"} width={24} height={24} alt=""/>
             {!toggleMenu && <span className="group-hover:translate-x-1 transition">Transaction Processing</span> }
           </Link>
           <Link 
-            className="flex w-full gap-[5px] text-[#FAF2E3] my-[12px] font-semibold group"
+            className="flex w-full gap-[5px] text-[#FAF2E3] my-[12px] font-semibold group items-center"
             href="#"
           >
             <Image src={"/svg/report-logo.svg"} width={24} height={24} alt=""/>
@@ -59,7 +61,7 @@ const NaviBar = (props) => {
 
       <div className="flex items-center justify-between gap-[8px]">
         <div className="flex gap-[12px] items-center">
-          <Image src={props.avatar} width={42} height={42} alt="" className="rounded-full"/>
+          <Image src={props.avatar} width={42} height={42} alt="" className={`object-cover rounded-full ${toggleMenu ? "w-[24px] h-[24px]" : ""} `}/>
           {!toggleMenu && <span className="text-[#FAF2E3] font-semibold">{props.name}</span>}
         </div>
         {!toggleMenu && 
@@ -67,7 +69,20 @@ const NaviBar = (props) => {
             <Image src={"/svg/settings.svg"} width={24} height={24} alt="" />
           </Popover> 
         }
-        {!toggleMenu && <Image src={"/svg/sign-out.svg"} width={24} height={24} alt="" /> }
+        {!toggleMenu && 
+          <Image 
+            onClick={() => {
+              localStorage.removeItem("user");
+              localStorage.removeItem("token");
+              router.push("/login");
+            }}
+            className="cursor-pointer" 
+            src={"/svg/sign-out.svg"} 
+            width={24} 
+            height={24} 
+            alt="" 
+          /> 
+        }
       </div>
 
       <Image 
@@ -78,7 +93,7 @@ const NaviBar = (props) => {
         alt=""
         onClick={() => {
           setToggleMenu(!toggleMenu)
-          props.onToggle;
+          props.onToggle();
         }}
       />
     </div>
