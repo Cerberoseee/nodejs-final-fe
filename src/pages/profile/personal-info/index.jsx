@@ -82,6 +82,7 @@ const PersonalInfo = () => {
     });
     if (res) {
       message.success("Updated success!");
+      await AuthApi.getMe();
       setTimeout(() => router.reload(), 2000);
     } else {
       message.error("Updated failed!");

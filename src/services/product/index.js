@@ -119,7 +119,6 @@ const deleteProduct = async (params) => {
       "Authorization": `Bearer ${localStorage.getItem("token")}` 
     }
   })
-  console.log(req);
   if (req.data.result == 'success') {
     return req.data;
   }
