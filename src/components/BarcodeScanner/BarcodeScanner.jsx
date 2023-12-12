@@ -62,7 +62,11 @@ const BarcodeScanner = (props) => {
   };
 
   return (
-    <div style={{display: 'none'}} id="interactive" className="viewport" />
+    <div
+      style={{display: 'none'}} 
+      id="interactive" 
+      className="viewport" 
+    />
   );
 };
 

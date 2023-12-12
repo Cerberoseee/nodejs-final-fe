@@ -256,6 +256,7 @@ const Staffs = () => {
           <Table
             pagination={{
               total: totalPage * 8,
+              pageSize: 8,
               onChange: (page) => setPage(page)
             }}
             loading={loading}

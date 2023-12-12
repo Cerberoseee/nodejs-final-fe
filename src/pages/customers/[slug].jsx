@@ -1,9 +1,11 @@
 import Image from "next/image";
 import Head from "next/head";
-import { Input, Button, Table, Modal } from "antd";
+import { Input, Button, Table, Modal, message } from "antd";
 import { useEffect, useState } from "react";
 import NaviBar from "src/components/NaviBar";
 import { useRouter } from "next/router";
+import CustomerApi from "src/services/customer"
+import InvoiceApi from "../../services/invoice";
 
 const CustomerDetails = () => {
   const [editModal, setEditModal] = useState(false); 
@@ -17,11 +19,11 @@ const CustomerDetails = () => {
 
   const [toggleMenu, setToggleMenu] = useState(true);
   const [invoiceList, setInvoiceList] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
 
   const router = useRouter();
-
   
-
   const invoiceColumns = [
     {
       title: 'Issued on',
@@ -86,7 +88,7 @@ const CustomerDetails = () => {
             <Image 
               className="cursor-pointer" 
               onClick={() => {
-                router.push("/transactions/" + item.id)
+                router.push("/transactions/" + item._id)
               }} 
               alt="" 
               src={"/svg/redirect.svg"} 
@@ -100,220 +102,76 @@ const CustomerDetails = () => {
   ];
 
   useEffect(() => {
-    const dummyData = [
-      {
-        "_id": "6574bdd4db8bc3e8ecdb887b",
-        "total_amount": 30000,
-        "customer_given": 40000,
-        "paid_back": 10000,
-        "created_at": "2023-12-09T19:19:48.176Z",
-        "account": {
-            "_id": "656cea9e97460517974e563e",
-            "email": "tranlethaison123@gmail.com",
-            "username": "tranlethaison123",
-            "fullName": "Son Tran Le",
-            "role": "Staff",
-            "avatarPath": "/upload/656cea9e97460517974e563e.png",
-            "isVerified": true,
-            "isActive": true,
-            "__v": 0,
-            "createdAt": "2023-12-09T19:20:58.359Z"
-        },
-        "detail_products": [
-            {
-                "quantity": 1,
-                "product": "6572e1e9d974fa728d34d70b",
-                "_id": "6574bdd4db8bc3e8ecdb887c"
-            }
-        ],
-        "customer": "65720b2933386ca747239767",
-        "__v": 0
-      },
-      {
-        "_id": "6574bdd4db8bc3e8ecdb887b",
-        "total_amount": 30000,
-        "customer_given": 40000,
-        "paid_back": 10000,
-        "created_at": "2023-12-09T19:19:48.176Z",
-        "account": {
-            "_id": "656cea9e97460517974e563e",
-            "email": "tranlethaison123@gmail.com",
-            "username": "tranlethaison123",
-            "fullName": "Son Tran Le",
-            "role": "Staff",
-            "avatarPath": "/upload/656cea9e97460517974e563e.png",
-            "isVerified": true,
-            "isActive": true,
-            "__v": 0,
-            "createdAt": "2023-12-09T19:20:58.359Z"
-        },
-        "detail_products": [
-            {
-                "quantity": 1,
-                "product": "6572e1e9d974fa728d34d70b",
-                "_id": "6574bdd4db8bc3e8ecdb887c"
-            }
-        ],
-        "customer": "65720b2933386ca747239767",
-        "__v": 0
-      },
-      {
-        "_id": "6574bdd4db8bc3e8ecdb887b",
-        "total_amount": 30000,
-        "customer_given": 40000,
-        "paid_back": 10000,
-        "created_at": "2023-12-09T19:19:48.176Z",
-        "account": {
-            "_id": "656cea9e97460517974e563e",
-            "email": "tranlethaison123@gmail.com",
-            "username": "tranlethaison123",
-            "fullName": "Son Tran Le",
-            "role": "Staff",
-            "avatarPath": "/upload/656cea9e97460517974e563e.png",
-            "isVerified": true,
-            "isActive": true,
-            "__v": 0,
-            "createdAt": "2023-12-09T19:20:58.359Z"
-        },
-        "detail_products": [
-            {
-                "quantity": 1,
-                "product": "6572e1e9d974fa728d34d70b",
-                "_id": "6574bdd4db8bc3e8ecdb887c"
-            }
-        ],
-        "customer": "65720b2933386ca747239767",
-        "__v": 0
-      },
-      {
-        "_id": "6574bdd4db8bc3e8ecdb887b",
-        "total_amount": 30000,
-        "customer_given": 40000,
-        "paid_back": 10000,
-        "created_at": "2023-12-09T19:19:48.176Z",
-        "account": {
-            "_id": "656cea9e97460517974e563e",
-            "email": "tranlethaison123@gmail.com",
-            "username": "tranlethaison123",
-            "fullName": "Son Tran Le",
-            "role": "Staff",
-            "avatarPath": "/upload/656cea9e97460517974e563e.png",
-            "isVerified": true,
-            "isActive": true,
-            "__v": 0,
-            "createdAt": "2023-12-09T19:20:58.359Z"
-        },
-        "detail_products": [
-            {
-                "quantity": 1,
-                "product": "6572e1e9d974fa728d34d70b",
-                "_id": "6574bdd4db8bc3e8ecdb887c"
-            }
-        ],
-        "customer": "65720b2933386ca747239767",
-        "__v": 0
-      },
-      {
-        "_id": "6574bdd4db8bc3e8ecdb887b",
-        "total_amount": 30000,
-        "customer_given": 40000,
-        "paid_back": 10000,
-        "created_at": "2023-12-09T19:19:48.176Z",
-        "account": {
-            "_id": "656cea9e97460517974e563e",
-            "email": "tranlethaison123@gmail.com",
-            "username": "tranlethaison123",
-            "fullName": "Son Tran Le",
-            "role": "Staff",
-            "avatarPath": "/upload/656cea9e97460517974e563e.png",
-            "isVerified": true,
-            "isActive": true,
-            "__v": 0,
-            "createdAt": "2023-12-09T19:20:58.359Z"
-        },
-        "detail_products": [
-            {
-                "quantity": 1,
-                "product": "6572e1e9d974fa728d34d70b",
-                "_id": "6574bdd4db8bc3e8ecdb887c"
-            }
-        ],
-        "customer": "65720b2933386ca747239767",
-        "__v": 0
-      },
-      {
-        "_id": "6574bdd4db8bc3e8ecdb887b",
-        "total_amount": 30000,
-        "customer_given": 40000,
-        "paid_back": 10000,
-        "created_at": "2023-12-09T19:19:48.176Z",
-        "account": {
-            "_id": "656cea9e97460517974e563e",
-            "email": "tranlethaison123@gmail.com",
-            "username": "tranlethaison123",
-            "fullName": "Son Tran Le",
-            "role": "Staff",
-            "avatarPath": "/upload/656cea9e97460517974e563e.png",
-            "isVerified": true,
-            "isActive": true,
-            "__v": 0,
-            "createdAt": "2023-12-09T19:20:58.359Z"
-        },
-        "detail_products": [
-            {
-                "quantity": 1,
-                "product": "6572e1e9d974fa728d34d70b",
-                "_id": "6574bdd4db8bc3e8ecdb887c"
-            }
-        ],
-        "customer": "65720b2933386ca747239767",
-        "__v": 0
-      },
-      {
-        "_id": "6574bdd4db8bc3e8ecdb887b",
-        "total_amount": 30000,
-        "customer_given": 40000,
-        "paid_back": 10000,
-        "created_at": "2023-12-09T19:19:48.176Z",
-        "account": {
-            "_id": "656cea9e97460517974e563e",
-            "email": "tranlethaison123@gmail.com",
-            "username": "tranlethaison123",
-            "fullName": "Son Tran Le",
-            "role": "Staff",
-            "avatarPath": "/upload/656cea9e97460517974e563e.png",
-            "isVerified": true,
-            "isActive": true,
-            "__v": 0,
-            "createdAt": "2023-12-09T19:20:58.359Z"
-        },
-        "detail_products": [
-            {
-                "quantity": 1,
-                "product": "6572e1e9d974fa728d34d70b",
-                "_id": "6574bdd4db8bc3e8ecdb887c"
-            }
-        ],
-        "customer": "65720b2933386ca747239767",
-        "__v": 0
-      },
-    ];
+    setLoading(true);
+    CustomerApi.listById({id: router.query.slug})
+    .then((res) => {
+      if (res) {
+        setCustomerData(res.data);
+        setPhoneNumber(res.data.phone_number);
+        setFullName(res.data.name);
+        setAddress(res.data.address);
+      }
+    })
+    .catch((err) => {
+      const data = err.response.data;
+      if (!!data.err.msg) message.error(data.err.msg);
+      else message.error(data.message)
+    });
+  }, [])
 
-    const data = {
-      phone_number: "09123123123",
-      name: "Le Van Testing",
-      address: "123 Le Van Luong, Tan Phong, Quan 7, Thanh pho Ho Chi Minh"
+  useEffect(() => {
+    InvoiceApi.listInvoiceByCustomer({
+      id: router.query.slug,
+      page: page,
+      limit: 8
+    }).then((res) => {
+      if (res) {
+        setInvoiceList(res.data);
+        setTotalPage(res.total_page)
+      }
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, [page]); 
+
+  const handleDelete = async () => {
+    const res = await CustomerApi
+    .deleteCustomer({
+      id: router.query.slug
+    })
+    .catch((err) => {
+      const data = err.response.data;
+      if (!!data.err.msg) message.error(data.err.msg);
+      else message.error(data.message)
+    });
+    if (res) {
+      message.success("Customer deleted success!");
+      setTimeout(() => router.push("/customers"), 2000);
+    } else {
+      message.error("Customer deleted failed!");
     }
-    
-    setCustomerData(data);
+  }
 
-    setPhoneNumber(data.phone_number);
-    setFullName(data.name);
-    setAddress(data.address);
-
-    setInvoiceList(dummyData);
-  }, []); // Fetch data on component mount
- 
+  const handleEdit = async () => {
+    const res = await CustomerApi
+    .editCustomer({
+      id: router.query.slug,
+      phone_number: phoneNumber,
+      address: address,
+      name: fullName
+    })
+    .catch((err) => {
+      const data = err.response.data;
+      if (!!data.message.msg) message.error(data.message.msg);
+      else message.error(data.message)
+    });
+    if (res) {
+      message.success("Customer updated success!");
+      setTimeout(() => router.reload(), 2000);
+    } else {
+      message.error("Customer updated failed!");
+    }
+  }
 
   return (
     <>
@@ -358,6 +216,11 @@ const CustomerDetails = () => {
                 scroll={{ x: "max-content" }} 
                 dataSource={invoiceList} 
                 columns={invoiceColumns} 
+                pagination={{
+                  total: 8 * totalPage,
+                  pageSize: 8,
+                  onChange: (page) => setPage(page)
+                }}
               />
             </div>
 
@@ -366,7 +229,7 @@ const CustomerDetails = () => {
         <Modal
           title={"Edit Customer"}
           open={editModal}
-          onOk={() => {}}
+          onOk={handleEdit}
           onCancel={() => {setEditModal(false)}}
           centered
 
@@ -388,7 +251,7 @@ const CustomerDetails = () => {
             onChange={(e) => setFullName(e.target.value)} 
             placeholder="Enter fullname"
           />
-          <p className="text-[16px]">Email</p>
+          <p className="text-[16px]">Address</p>
           <Input 
             size="large"
             value={address}
@@ -400,7 +263,7 @@ const CustomerDetails = () => {
         <Modal
           title={"Delete Customer"}
           open={deleteModal}
-          onOk={() => {}}
+          onOk={handleDelete}
           onCancel={() => {setDeleteModal(false)}}
           centered
         >

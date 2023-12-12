@@ -85,7 +85,7 @@ const Customers = () => {
           <div className="flex justify-end gap-[12px]">
             <Image 
               className="cursor-pointer" 
-              onClick={() => router.push("/customers/"+item.id)} 
+              onClick={() => router.push("/customers/"+item._id)} 
               alt="" 
               src={"/svg/redirect.svg"} 
               width={24} 
@@ -95,7 +95,6 @@ const Customers = () => {
               className="cursor-pointer"
               onClick={() => {
                 setEditCustomer(item);
-                console.log(item);
                 setEditModal(true);
               }}
               alt="" 
@@ -206,6 +205,7 @@ const Customers = () => {
             columns={columns}
             scroll={{ x: "max-content" }}
             pagination={{
+              pageSize: 8,
               total: totalPage * 8,
               onChange: (page) => setPage(page)
             }}

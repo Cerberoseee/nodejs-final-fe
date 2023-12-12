@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Input, message, Form } from 'antd';
-import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
+import { PlusOutlined, SearchOutlined, ScanOutlined } from '@ant-design/icons';
 import NaviBar from 'src/components/NaviBar';
 import Image from "next/image"
 import Head from 'next/head';
@@ -8,10 +8,12 @@ import ProductApi from "src/services/product"
 import { useDebounce } from "@uidotdev/usehooks";
 import Barcode from 'react-barcode';
 import { useRouter } from 'next/router';
+import BarcodeScanner from "src/components/BarcodeScanner/BarcodeScanner"
 
 const ProductCatalog = () => {
   const router = useRouter();
   const [products, setProducts] = useState([]);
+  const [scanner, setScanner] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState('');
   const debounceValue = useDebounce(searchTerm, 2000);
@@ -29,34 +31,39 @@ const ProductCatalog = () => {
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
 
-  const [addForm, updateForm] = Form.useForm();
+  const [addForm] = Form.useForm();
 
   useEffect(() => {
     setLoading(true);
     if (debounceValue == "") {
       ProductApi.listAdmin({page: page, limit: 6}).then((res) => {
-        let newData = res.data.map((item) => {
-          return {
-            ...item,
-            key: item._id
-          }
-        })
-        setProducts(newData);
-        setTotalPage(res.total_page);
-        setLoading(false);
+        if (res) {
+          let newData = res.data.map((item) => {
+            return {
+              ...item,
+              key: item._id
+            }
+          })
+          setProducts(newData);
+          setTotalPage(res.total_page);
+          setLoading(false);
+        }
+        
       })
     } else 
     {
       ProductApi.listByNameAdmin({page: page, limit: 6, name: debounceValue}).then((res) => {
-        let newData = res.data.map((item) => {
-          return {
-            ...item,
-            key: item._id
-          }
-        })
-        setProducts(newData);
-        setTotalPage(res.total_page);
-        setLoading(false);
+        if (res) {
+          let newData = res.data.map((item) => {
+            return {
+              ...item,
+              key: item._id
+            }
+          })
+          setProducts(newData);
+          setTotalPage(res.total_page);
+          setLoading(false);
+        }
       })
     }
   }, [page, debounceValue])
@@ -219,6 +226,14 @@ const ProductCatalog = () => {
             />
             <Button
               size='large'
+              icon={<ScanOutlined/>}
+              style={{ marginLeft: 8 }}
+              onClick={() => setScanner(!scanner)}
+            >
+              Toggle scanner {!scanner ? "on" : "off"}
+            </Button>
+            <Button
+              size='large'
               type="primary"
               icon={<PlusOutlined />}
               style={{ marginLeft: 8 }}
@@ -234,8 +249,10 @@ const ProductCatalog = () => {
             columns={columns}
             pagination={{
               total: totalPage * 8,
+              pageSize: 8,
               onChange: (page) => setPage(page)
-            }}/>
+            }}
+          />
         </div>
         
 
@@ -335,6 +352,10 @@ const ProductCatalog = () => {
         >
           <p>Are you sure you want to delete this product?</p>
         </Modal>
+
+        {
+          scanner && <BarcodeScanner onDetected={(value) => setSearchTerm(value)} />
+        }
       </main>
     </>
 
