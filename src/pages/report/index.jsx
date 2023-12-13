@@ -131,7 +131,7 @@ const PersonalInfo = () => {
           <div className="flex justify-between mb-[24px]">
             <h1 className="font-bold text-2xl mb-0">Report And Analytics</h1>
             <div className="flex gap-[12px] justify-end items-center">
-              <DatePicker.RangePicker size="large" value={date} onChange={(value) => setDate(value)} />
+              <DatePicker.RangePicker size="large" value={date} onChange={(value) => setDate(value)} format={"DD/MM/YYYY"}/>
               <Button
                 disabled={!enable}
                 type="primary"
@@ -149,7 +149,7 @@ const PersonalInfo = () => {
                 <span>{(data?.total_amount_order ? data.total_amount_order : 0).toLocaleString()} VNĐ</span>
               </div>
               
-              {(data?.total_profit) && (
+              {(!!data?.total_profit) && (
                 <div>
                   <h3>Total Profit:</h3>
                   <span>{(data?.total_profit ? data.total_profit : 0).toLocaleString()} VNĐ</span>

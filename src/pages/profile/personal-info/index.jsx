@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import {getStorageUrl} from "src/misc"
 import AuthApi from "../../../services/auth";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 const getBase64 = (img , callback) => {
   const reader = new FileReader();
@@ -90,92 +91,98 @@ const PersonalInfo = () => {
   }
 
   return (
-    <main className={`flex min-h-screen bg-[#FAF2E3]`}>
-      <NaviBar onToggle={() => {}}/>
-      <div className="p-[32px] w-full">
-        <h1 className="font-bold text-2xl mb-[24px]">Account Information</h1>
-        <div className="bg-white rounded-[4px] p-[16px] w-full">
-          <Form 
-            form={form}
-            layout="vertical"
-            onFinish={onFinish}
-            requiredMark={false}
-            initialValues={{
-              fullName: fullName,
-              email: email
-            }}
-          >        
-            <Form.Item 
-              name="avatar"
-              getValueFromEvent={({file}) => file.originFileObj}
-              className={"mb-[24px]"}
-              label={
-                <p className="mb-[12px] font-semibold">Profile Picture</p>
-              }
-            >
-              <Upload
-                listType="picture-circle"
-                className="avatar-uploader"
-                showUploadList={false}
-                beforeUpload={beforeUpload}
-                onChange={handleChange}
-              >
-                {
-                  imageUrl ?
-                  <Image 
-                    style={{
-                      width: "100%", 
-                      height:"100%",
-                      aspectRatio: 1, 
-                      objectFit: "cover", 
-                      borderRadius: "50%"
-                    }} 
-                    width={120} 
-                    height={120} 
-                    src={imageUrl} 
-                    alt="avatar"
-                  />
-                  : uploadButton
+    <>
+      <Head>
+        <title>Personal Information</title>
+      </Head>
+      <main className={`flex min-h-screen bg-[#FAF2E3]`}>
+        <NaviBar onToggle={() => {}}/>
+        <div className="p-[32px] w-full">
+          <h1 className="font-bold text-2xl mb-[24px]">Account Information</h1>
+          <div className="bg-white rounded-[4px] p-[16px] w-full">
+            <Form 
+              form={form}
+              layout="vertical"
+              onFinish={onFinish}
+              requiredMark={false}
+              initialValues={{
+                fullName: fullName,
+                email: email
+              }}
+            >        
+              <Form.Item 
+                name="avatar"
+                getValueFromEvent={({file}) => file.originFileObj}
+                className={"mb-[24px]"}
+                label={
+                  <p className="mb-[12px] font-semibold">Profile Picture</p>
                 }
-              </Upload>
-            </Form.Item>
-              
-            <div className="mb-[24px]">
-              <p className="mb-[12px] font-semibold">Fullname *</p>
+              >
+                <Upload
+                  listType="picture-circle"
+                  className="avatar-uploader"
+                  showUploadList={false}
+                  beforeUpload={beforeUpload}
+                  onChange={handleChange}
+                >
+                  {
+                    imageUrl ?
+                    <Image 
+                      style={{
+                        width: "100%", 
+                        height:"100%",
+                        aspectRatio: 1, 
+                        objectFit: "cover", 
+                        borderRadius: "50%"
+                      }} 
+                      width={120} 
+                      height={120} 
+                      src={imageUrl} 
+                      alt="avatar"
+                    />
+                    : uploadButton
+                  }
+                </Upload>
+              </Form.Item>
+                
+              <div className="mb-[24px]">
+                <p className="mb-[12px] font-semibold">Fullname *</p>
 
-              <Input
-                placeholder="Enter fullname"
-                size="large"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-              />
-            </div>
-              
+                <Input
+                  placeholder="Enter fullname"
+                  size="large"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                />
+              </div>
+                
 
-            <div className="mb-[24px]">
-              <p className="mb-[12px] font-semibold">Email *</p>
-              <Input
-                disabled
-                size="large"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-          </Form>
+              <div className="mb-[24px]">
+                <p className="mb-[12px] font-semibold">Email *</p>
+                <Input
+                  disabled
+                  size="large"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+            </Form>
+          </div>
+              
+          <Button
+            onClick={() => form.submit()}
+            type="primary" 
+            color="#5FBFEF"
+            style={{borderColor: '#5FBFEF'}} 
+            size="large" 
+            className="mt-[24px] ml-auto block w-fit font-semibold"
+          >
+            Save changes
+          </Button>
         </div>
-            
-        <Button
-          onClick={() => form.submit()}
-          type="primary" 
-          color="#5FBFEF"
-          style={{borderColor: '#5FBFEF'}} 
-          size="large" 
-          className="mt-[24px] ml-auto block w-fit font-semibold"
-        >
-          Save changes
-        </Button>
-      </div>
-    </main>
+      </main>
+    </>
+    
   );
 }
 
