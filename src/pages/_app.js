@@ -21,8 +21,24 @@ export default function App({ Component, pageProps }) {
     }    
   }
 
+  const checkLogin = async () => {
+    let data = JSON.parse(localStorage.getItem("user"));
+    if (Object.keys(data).length > 0) {
+      if (data.isFirstTime) {
+        router.push("/profile/change-password").then(() => {
+          setLoading(false);
+        })
+      } else {
+      setLoading(false);
+      }    
+    }
+  }
+
   useEffect(() => {
     authenticateRoute();
+    if (localStorage.getItem("user")) {
+      checkLogin();
+    }
   }, [router.pathname])
 
   return !loading ? (

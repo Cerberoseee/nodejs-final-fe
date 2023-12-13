@@ -51,7 +51,7 @@ const ChangePassword = () => {
 
   return (
     <main className={`flex min-h-screen bg-[#FAF2E3]`}>
-      <NaviBar onToggle={() => {}} avatar={!!user?.avatarPath ? getStorageUrl() + user.avatarPath : "/avatar-placeholder.jpg"} name={user?.fullName} />
+      {!(user.isFirstTime && user) && <NaviBar onToggle={() => {}}/>}
       <div className="p-[32px] w-full">
         <h1 className="font-bold text-2xl mb-[24px]">Change Password</h1>
 
@@ -86,16 +86,33 @@ const ChangePassword = () => {
           
         </div>
 
-        <Button
-          onClick={handleSubmit}
-          type="primary" 
-          color="#5FBFEF"
-          style={{borderColor: '#5FBFEF'}} 
-          size="large" 
-          className="mt-[24px] ml-auto block w-fit font-semibold"
-        >
-          Save changes
-        </Button>
+        <div className="flex ml-auto mt-[24px] gap-[12px] justify-end">
+          {(user.isFirstTime && user) && (
+            <Button
+              onClick={() => {
+                localStorage.removeItem("user");
+                localStorage.removeItem("token");
+                router.push("/login");
+              }}
+              size="large" 
+              className="block w-fit font-semibold"
+            >
+              Logout
+            </Button>
+          )}
+
+          <Button
+            onClick={handleSubmit}
+            type="primary" 
+            color="#5FBFEF"
+            style={{borderColor: '#5FBFEF'}} 
+            size="large" 
+            className=" block w-fit font-semibold"
+          >
+            Save changes
+          </Button>
+        </div>
+        
       </div>
     </main>
   );

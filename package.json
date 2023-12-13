@@ -26,6 +26,7 @@
     "react-barcode": "^1.4.6",
     "react-dom": "^18",
     "react-loading-icons": "^1.1.0",
+    "react-to-print": "^2.14.15",
     "sass": "^1.68.0"
   },
   "devDependencies": {

@@ -104,7 +104,7 @@ const StaffDetail = () => {
         <title>Staff Details</title>
       </Head>
       <main className={`flex min-h-screen bg-[#FAF2E3]`}>
-        <NaviBar onToggle={() => setToggleMenu(!toggleMenu)} avatar={"/avatar-placeholder.jpg"} name={"Nguyễn Văn A"} />
+        <NaviBar onToggle={() => setToggleMenu(!toggleMenu)} />
         <div className={`p-[32px]`} style={{width: 'calc(100% - ' + (!toggleMenu ? '50px' : '300px') + ")"}}>
           <h1 className="font-bold text-2xl mb-[24px]">Staffs Detail</h1>
           <div className="flex gap-[32px]">

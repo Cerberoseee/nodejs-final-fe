@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Table, Button, Modal, Input, message, Form } from 'antd';
-import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import NaviBar from 'src/components/NaviBar';
 import Head from 'next/head';
-import BarcodeScanner from '../../../components/BarcodeScanner/BarcodeScanner';
 import Image from 'next/image';
+import { useReactToPrint } from 'react-to-print';
+
+import {PrintComponent} from 'src/components/PrintComponent';
+import BarcodeScanner from 'src/components/BarcodeScanner/BarcodeScanner';
 
 import CustomerApi from "src/services/customer"
 import ProductApi from "src/services/product"
@@ -18,6 +20,7 @@ const TransactionAdd = () => {
 
   const [products, setProducts] = useState([]);
   const [customers, setCustomers] = useState([]);
+  const [staff, setStaff] = useState({});
 
   const [summaryModal, setSummaryModal] = useState(false);
 
@@ -56,6 +59,10 @@ const TransactionAdd = () => {
 
   const [isAbleCreate, setIsAbleCreate] = useState(false);
   
+  useEffect(() => {
+    setStaff(JSON.parse(localStorage.getItem("user")));
+  }, [])
+
   useEffect(() => {
     if (debounceSearchCustomer == "") {
       CustomerApi.list({limit: 4, page: customerPagination.page})
@@ -256,12 +263,17 @@ const TransactionAdd = () => {
     setAddCustomerModal(false);
   }
 
+  const componentRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
+
   const handleSubmit = async () => {
     let params = {
       total_amount: parseFloat(totalAmount),
       customer_given: parseFloat(customerGiven),
       paid_back: parseFloat(customerPayback),
-      account: (JSON.parse(localStorage.getItem("user")))._id,
+      account: staff?._id,
       detail_products: selectedProduct.map((item) => item._id),
       detail_products_quantity: selectedProduct.map((item) => item.quantity),
       customer: selectedCustomer._id
@@ -276,6 +288,7 @@ const TransactionAdd = () => {
     });
     if (res) {
       message.success("Transaction added success!");
+      handlePrint();
       setTimeout(() => router.push("/transactions"), 2000);
     } else {
       message.error("Transaction added failed!");
@@ -298,7 +311,7 @@ const TransactionAdd = () => {
         <title>Transaction Management</title>
       </Head>
       <main className={`flex min-h-screen bg-[#FAF2E3]`}>
-        <NaviBar onToggle={() => setToggleMenu(!toggleMenu)} avatar={"/avatar-placeholder.jpg"} name={"Nguyễn Văn A"} />
+        <NaviBar onToggle={() => setToggleMenu(!toggleMenu)} />
         <div className={`p-[32px]`} style={{ width: 'calc(100% - ' + (!toggleMenu ? '50px' : '300px') + ')' }}>
           <div className='flex justify-between'>
             <h1 className="font-bold text-2xl mb-[24px]">Add new Transaction</h1>
@@ -308,7 +321,7 @@ const TransactionAdd = () => {
           </div>
           <div className="flex justify-between gap-[12px] mb-[24px]">
             <div className='w-1/2'>
-              <Table style={{ height: '550px' }} columns={invoiceColumns} scroll={{y: 550}} dataSource={selectedProduct}/>
+              <Table style={{ height: '500px' }} columns={invoiceColumns} scroll={{y: 500}} dataSource={selectedProduct}/>
               <div>
                 <div className='flex justify-between'>
                   <h3>Selected Customer Phone:</h3>
@@ -476,6 +489,18 @@ const TransactionAdd = () => {
               placeholder="Enter address"
             />
           </Modal>
+          <div className='hidden'>
+            <PrintComponent 
+              customer={selectedCustomer.name}
+              staff={staff?.fullName}
+              ref={componentRef} 
+              products={selectedProduct} 
+              totalAmount={totalAmount}
+              customerGiven={customerGiven}
+              customerPayback={customerPayback} 
+            />
+          </div>
+          
         </div>
       </main>
     </>
