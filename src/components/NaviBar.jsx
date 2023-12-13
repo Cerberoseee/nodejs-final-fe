@@ -3,10 +3,17 @@ import Link from "next/link";
 import { useState } from "react";
 import { Popover } from 'antd';
 import { useRouter } from "next/router";
+import {getStorageUrl} from "src/misc";
+import { useEffect } from "react";
 
 const NaviBar = (props) => {
   const [toggleMenu, setToggleMenu] = useState(false);
   const router = useRouter();
+
+  const [user, setUser] = useState({});
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("user") || "{}"))
+  }, [])
 
   const content = (
     <div>
@@ -28,13 +35,18 @@ const NaviBar = (props) => {
             <Image src={"/svg/product-logo.svg"} width={24} height={24} alt=""/>
             {!toggleMenu && <span className="group-hover:translate-x-1 transition">Product Catalogue</span>} 
           </Link>
-          <Link 
-            className="flex w-full gap-[5px] text-[#FAF2E3] my-[12px] font-semibold group items-center"
-            href="/staffs"
-          >
-            <Image src={"/svg/customer-logo.svg"} width={24} height={24} alt=""/>
-            {!toggleMenu && <span className="group-hover:translate-x-1 transition ">Staffs</span> }
-          </Link>
+          {
+            user.role == 'Admin' && (
+              <Link 
+                className="flex w-full gap-[5px] text-[#FAF2E3] my-[12px] font-semibold group items-center"
+                href="/staffs"
+              >
+                <Image src={"/svg/customer-logo.svg"} width={24} height={24} alt=""/>
+                {!toggleMenu && <span className="group-hover:translate-x-1 transition ">Staffs</span> }
+              </Link>
+            )
+          }
+          
           <Link 
             className="flex w-full gap-[5px] text-[#FAF2E3] my-[12px] font-semibold group items-center"
             href="/customers"
@@ -51,7 +63,7 @@ const NaviBar = (props) => {
           </Link>
           <Link 
             className="flex w-full gap-[5px] text-[#FAF2E3] my-[12px] font-semibold group items-center"
-            href="#"
+            href="/report"
           >
             <Image src={"/svg/report-logo.svg"} width={24} height={24} alt=""/>
             {!toggleMenu && <span className="group-hover:translate-x-1 transition">Report and Analytics</span> }
@@ -61,8 +73,8 @@ const NaviBar = (props) => {
 
       <div className="flex items-center justify-between gap-[8px]">
         <div className="flex gap-[12px] items-center">
-          <Image src={props.avatar} width={42} height={42} alt="" className={`object-cover rounded-full ${toggleMenu ? "w-[24px] h-[24px]" : ""} `}/>
-          {!toggleMenu && <span className="text-[#FAF2E3] font-semibold">{props.name}</span>}
+          <Image src={!!user.avatarPath ? getStorageUrl() + user.avatarPath : "/avatar-placeholder.jpg"} width={42} height={42} alt="" className={`object-cover rounded-full ${toggleMenu ? "w-[24px] h-[24px]" : ""} `}/>
+          {!toggleMenu && <span className="text-[#FAF2E3] font-semibold">{user?.fullName}</span>}
         </div>
         {!toggleMenu && 
           <Popover className="cursor-pointer" content={content} trigger="hover">

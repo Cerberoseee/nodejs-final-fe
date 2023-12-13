@@ -40,7 +40,7 @@ const CustomerDetails = () => {
       )
     },
     {
-      title: 'Product Name',
+      title: 'Total Amount',
       dataIndex: 'total_amount',
       key: 'total_amount',
       render: (item) => (
@@ -50,7 +50,7 @@ const CustomerDetails = () => {
       )
     },
     {
-      title: 'Import Price',
+      title: 'Customer Given',
       dataIndex: 'customer_given',
       key: 'customer_given',
       render: (item) => (
@@ -60,7 +60,7 @@ const CustomerDetails = () => {
       )
     },
     {
-      title: 'Retail Price',
+      title: 'Customer Paidback',
       dataIndex: 'paid_back',
       key: 'paid_back',
       render: (item) => (
@@ -101,8 +101,13 @@ const CustomerDetails = () => {
     }
   ];
 
+  const [user, setUser] = useState();
+    
   useEffect(() => {
-    setLoading(true);
+    setUser(JSON.parse(localStorage.getItem("user") || "{}"));
+  }, [])
+
+  useEffect(() => {
     CustomerApi.listById({id: router.query.slug})
     .then((res) => {
       if (res) {
@@ -120,6 +125,7 @@ const CustomerDetails = () => {
   }, [])
 
   useEffect(() => {
+    setLoading(true);
     InvoiceApi.listInvoiceByCustomer({
       id: router.query.slug,
       page: page,
@@ -132,6 +138,7 @@ const CustomerDetails = () => {
     }).catch((err) => {
       console.log(err);
     })
+    setLoading(false);
   }, [page]); 
 
   const handleDelete = async () => {
@@ -179,7 +186,7 @@ const CustomerDetails = () => {
         <title>Customers Details</title>
       </Head>
       <main className={`flex min-h-screen bg-[#FAF2E3]`}>
-        <NaviBar onToggle={() => setToggleMenu(!toggleMenu)} avatar={"/avatar-placeholder.jpg"} name={"Nguyễn Văn A"} />
+        <NaviBar onToggle={() => setToggleMenu(!toggleMenu)} />
         <div className={`p-[32px]`} style={{width: 'calc(100% - ' + (!toggleMenu ? '50px' : '300px') + ")"}}>
           <h1 className="font-bold text-2xl mb-[24px]">Customers Management</h1>
             <div className="flex gap-[32px]">
@@ -201,9 +208,12 @@ const CustomerDetails = () => {
                   <Button onClick={() => setEditModal(true)} type="primary" className="w-fit mb-[12px]">
                     <span>Edit Customer</span>
                   </Button >
-                  <Button  onClick={() => setDeleteModal(true)}  type="primary" danger className="w-fit">
-                    <span>Delete Customer</span>
-                  </Button>
+                  {(user && user.role == "Admin") && (
+                    <Button onClick={() => setDeleteModal(true)}  type="primary" danger className="w-fit">
+                      <span>Delete Customer</span>
+                    </Button>
+                  )}
+                  
                 </div>
               </div>
             </div>
@@ -212,6 +222,7 @@ const CustomerDetails = () => {
             >
               <h3>Issued Orders</h3>
               <Table
+                loading={loading}
                 className="mt-[16px]"
                 scroll={{ x: "max-content" }} 
                 dataSource={invoiceList} 

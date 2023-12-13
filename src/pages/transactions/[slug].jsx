@@ -19,6 +19,12 @@ const StaffDetail = () => {
   const [products, setProducts] = useState([]);
   const [data, setData] = useState({});
 
+  const [user, setUser] = useState();
+    
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("user") || "{}"));
+  }, [])
+
   useEffect(() => {
     InvoiceApi.listById({id: router.query.slug})
     .then((res) => {
@@ -108,13 +114,18 @@ const StaffDetail = () => {
         <title>Transaction Details</title>
       </Head>
       <main className={`flex min-h-screen bg-[#FAF2E3]`}>
-        <NaviBar onToggle={() => setToggleMenu(!toggleMenu)} avatar={"/avatar-placeholder.jpg"} name={"Nguyễn Văn A"} />
+        <NaviBar onToggle={() => setToggleMenu(!toggleMenu)}/>
         <div className={`p-[32px]`} style={{width: 'calc(100% - ' + (!toggleMenu ? '50px' : '300px') + ")"}}>
           <div className="flex justify-between items-center mb-[24px]">
             <h1 className="font-bold text-2xl ">Transaction Details</h1>
-            <Button onClick={() => setDeleteModal(true)} type="primary" danger className="w-fit" size="large">
-              <span>Delete Transaction</span>
-            </Button>
+            {
+              (user && user.role == "Admin") && (
+                <Button onClick={() => setDeleteModal(true)} type="primary" danger className="w-fit" size="large">
+                  <span>Delete Transaction</span>
+                </Button>
+              )
+            }
+           
           </div>
           <div className="flex gap-[32px] ">
             <div className="bg-white p-[24px] rounded-[12px] w-2/3">
@@ -123,7 +134,6 @@ const StaffDetail = () => {
                 scroll={{ x: "max-content", y: 500 }} 
                 dataSource={products} 
                 columns={columns}
-                pagination={false}
               /> 
             </div>
             <div className="w-1/3">

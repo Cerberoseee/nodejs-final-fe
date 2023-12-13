@@ -30,6 +30,12 @@ const Customers = () => {
   const [data, setData]= useState([]);
   const [deleteId, setDeleteId] = useState();
 
+  const [user, setUser] = useState();
+    
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("user") || "{}"));
+  }, [])
+
   useEffect(() => {
     setLoading(true);
     if (debounceValue == "") {
@@ -102,17 +108,20 @@ const Customers = () => {
               width={24} 
               height={24}
             />
-            <Image 
-              className="cursor-pointer"
-              onClick={() => {
-                setDeleteId(item._id);
-                setDeleteModal(true);
-              }}
-              alt="" 
-              src={"/svg/trash.svg"} 
-              width={24} 
-              height={24}
-            />
+            {(user && user.role == "Admin") && (
+              <Image 
+                className="cursor-pointer"
+                onClick={() => {
+                  setDeleteId(item._id);
+                  setDeleteModal(true);
+                }}
+                alt="" 
+                src={"/svg/trash.svg"} 
+                width={24} 
+                height={24}
+              />
+            )}
+            
           </div>
         )
       }
@@ -179,7 +188,7 @@ const Customers = () => {
         <title>Customers Management</title>
       </Head>
       <main className={`flex min-h-screen bg-[#FAF2E3]`}>
-        <NaviBar onToggle={() => setToggleMenu(!toggleMenu)} avatar={"/avatar-placeholder.jpg"} name={"Nguyễn Văn A"} />
+        <NaviBar onToggle={() => setToggleMenu(!toggleMenu)} />
         <div className={`p-[32px]`} style={{width: 'calc(100% - ' + (!toggleMenu ? '50px' : '300px') + ")"}}>
           <h1 className="font-bold text-2xl mb-[24px]">Customers Management</h1>
           <div className="flex justify-between gap-[12px] mb-[24px]">

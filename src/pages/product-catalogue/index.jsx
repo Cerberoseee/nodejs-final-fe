@@ -15,6 +15,8 @@ const ProductCatalog = () => {
   const [products, setProducts] = useState([]);
   const [scanner, setScanner] = useState(false);
 
+  const [user, setUser] = useState();
+
   const [searchTerm, setSearchTerm] = useState('');
   const debounceValue = useDebounce(searchTerm, 2000);
 
@@ -36,7 +38,7 @@ const ProductCatalog = () => {
   useEffect(() => {
     setLoading(true);
     if (debounceValue == "") {
-      ProductApi.listAdmin({page: page, limit: 6}).then((res) => {
+      ProductApi.list({page: page, limit: 6}).then((res) => {
         if (res) {
           let newData = res.data.map((item) => {
             return {
@@ -52,7 +54,7 @@ const ProductCatalog = () => {
       })
     } else 
     {
-      ProductApi.listByNameAdmin({page: page, limit: 6, name: debounceValue}).then((res) => {
+      ProductApi.listByName({page: page, limit: 6, name: debounceValue}).then((res) => {
         if (res) {
           let newData = res.data.map((item) => {
             return {
@@ -71,7 +73,52 @@ const ProductCatalog = () => {
   useEffect(() => {
     setPage(1);
   }, [debounceValue])
+
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("user") || "{}"));
+  }, [])
   
+  const importCol = (user && user?.role == "Admin") ? {
+    title: 'Import Price',
+    dataIndex: 'import_price',
+    key: 'import_price',
+    align: "center",
+    render: (item) => (
+      <span>{item.toLocaleString()} VNĐ</span>
+    )
+  } : {};
+  
+  const actionCol = (user && user?.role == "Admin") ? {
+    title: 'Action',
+    key: 'action',
+    align: "right",
+    render: (_, record) => (
+      <span className='flex w-full gap-[12px]'>
+        <Image 
+          className="cursor-pointer" 
+          onClick={() => {
+            setUpdateProduct({...record});
+            setUpdateProductModalVisible(true)
+          }} 
+          alt="" 
+          src={"/svg/edit.svg"} 
+          width={24} 
+          height={24}
+        />
+        <Image 
+          className="cursor-pointer" 
+          onClick={() => {
+            setDeleteId(record._id)
+            setDeleteProductModalVisible(true)
+          }} 
+          alt="" 
+          src={"/svg/trash.svg"}
+          width={24} 
+          height={24}
+        />
+      </span>
+    ),
+  } : {}
 
   const columns = [
     {
@@ -83,20 +130,13 @@ const ProductCatalog = () => {
         <Barcode width={1} height={40} fontSize={12} value={item} />
       )
     },
+    importCol,
     {
       title: 'Product Name',
       dataIndex: 'name',
       key: 'name',
     },
-    {
-      title: 'Import Price',
-      dataIndex: 'import_price',
-      key: 'import_price',
-      align: "center",
-      render: (item) => (
-        <span>{item.toLocaleString()} VNĐ</span>
-      )
-    },
+    
     {
       title: 'Retail Price',
       dataIndex: 'retail_price',
@@ -127,37 +167,7 @@ const ProductCatalog = () => {
       key: 'stock_quantity',
       align: "center",
     },
-    {
-      title: 'Action',
-      key: 'action',
-      align: "right",
-      render: (_, record) => (
-        <span className='flex w-full gap-[12px]'>
-          <Image 
-            className="cursor-pointer" 
-            onClick={() => {
-              setUpdateProduct({...record});
-              setUpdateProductModalVisible(true)
-            }} 
-            alt="" 
-            src={"/svg/edit.svg"} 
-            width={24} 
-            height={24}
-          />
-          <Image 
-            className="cursor-pointer" 
-            onClick={() => {
-              setDeleteId(record._id)
-              setDeleteProductModalVisible(true)
-            }} 
-            alt="" 
-            src={"/svg/trash.svg"}
-            width={24} 
-            height={24}
-          />
-        </span>
-      ),
-    },
+    actionCol
   ];
 
   const handleDelete = async () => {
@@ -214,7 +224,7 @@ const ProductCatalog = () => {
         <title>Product Catalogue Management</title>
       </Head>
       <main className={`flex min-h-screen bg-[#FAF2E3]`}>
-        <NaviBar onToggle={() => setToggleMenu(!toggleMenu)} avatar={"/avatar-placeholder.jpg"} name={"Nguyễn Văn A"} />
+        <NaviBar onToggle={() => setToggleMenu(!toggleMenu)} />
         <div className={`p-[32px]`} style={{ width: 'calc(100% - ' + (!toggleMenu ? '50px' : '300px') + ')' }}>
           <h1 className="font-bold text-2xl mb-[24px]">Product Catalog Management</h1>
           <div className="flex justify-between gap-[12px] mb-[24px]">
@@ -232,7 +242,7 @@ const ProductCatalog = () => {
             >
               Toggle scanner {!scanner ? "on" : "off"}
             </Button>
-            <Button
+            {(user && user?.role == "Admin") && <Button
               size='large'
               type="primary"
               icon={<PlusOutlined />}
@@ -240,7 +250,7 @@ const ProductCatalog = () => {
               onClick={() => setAddProductModalVisible(true)} // Open the add product modal
             >
               Add new product
-            </Button>
+            </Button>}
           </div>
           <Table 
             loading={loading} 
