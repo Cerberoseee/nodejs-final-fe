@@ -102,8 +102,7 @@ const changePassword = async (params) => {
 
 const firstChanged = async () => {
   const url = `/auth/first-changed`;
-  let req = await Api.post(url, 
-    data,
+  let req = await Api.get(url, 
     {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem("token")}`,
