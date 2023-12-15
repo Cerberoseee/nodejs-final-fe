@@ -43,6 +43,10 @@ const ChangePassword = () => {
 
     if (res) {
       message.success("Password changed success!");
+      if (user.isFirstTime) {
+        await AuthApi.firstChanged();
+        await AuthApi.getMe();
+      }
       setTimeout(() => router.reload(), 2000);
     } else {
       message.error("Password changed failed!");

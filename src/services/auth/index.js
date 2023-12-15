@@ -100,12 +100,29 @@ const changePassword = async (params) => {
   return null;
 }
 
+const firstChanged = async () => {
+  const url = `/auth/first-changed`;
+  let req = await Api.post(url, 
+    data,
+    {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem("token")}`,
+      }
+    }
+  );
+  if (req.data.result == "success") {
+    return req.data;
+  }
+  return null;
+}
+
 const AuthApi = {
   login,
   getMe,
   update,
   verifyLogin,
-  changePassword
+  changePassword,
+  firstChanged
 }
 
 export default AuthApi;
