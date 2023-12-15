@@ -29,7 +29,7 @@ const PersonalInfo = () => {
       return null;
     })
     if (res) {
-      message.success("Retried data success!");
+      message.success("Retrieved data success!");
       console.log(res);
       setInvoiceList(res.data.invoices);
       setData(res.data);
