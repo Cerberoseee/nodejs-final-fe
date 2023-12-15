@@ -27,7 +27,7 @@ const Login = () => {
     }).catch((err) => {
       console.log(err);
       if (err.response?.data?.status == '0') {
-        message.error("Please enter correct username or password!");
+        message.error(err.response?.data?.message);
       }
     })
   }
