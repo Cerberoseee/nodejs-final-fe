@@ -150,6 +150,10 @@ const StaffDetail = () => {
                   <h4>Customer Paidback:</h4>
                   <p>{(data.paid_back || "").toLocaleString()} VNĐ</p>
                 </div>
+                <div className="flex justify-between">
+                  <h4>Date Issued:</h4>
+                  <p>{(new Date(data.created_at)).toLocaleDateString("vi-VN")}</p>
+                </div>
 
               </div>
               <div className="bg-white p-[24px] rounded-[12px]">

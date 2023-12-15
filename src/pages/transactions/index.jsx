@@ -67,7 +67,7 @@ const TransactionList = () => {
       )
     },
     {
-      title: 'Imported Date',
+      title: 'Date Issued',
       dataIndex: 'created_at',
       key: 'created_at',
       render: (item) => (
