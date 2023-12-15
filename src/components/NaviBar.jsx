@@ -73,7 +73,7 @@ const NaviBar = (props) => {
 
       <div className="flex items-center justify-between gap-[8px]">
         <div className="flex gap-[12px] items-center">
-          <Image src={!!user.avatarPath ? getStorageUrl() + user.avatarPath : "/avatar-placeholder.jpg"} width={42} height={42} alt="" className={`object-cover rounded-full ${toggleMenu ? "w-[24px] h-[24px]" : ""} `}/>
+          <img src={!!user.avatarPath ? getStorageUrl() + user.avatarPath : "/avatar-placeholder.jpg"} width={42} height={42} alt="" className={`object-cover rounded-full ${toggleMenu ? "w-[24px] h-[24px]" : ""} `}/>
           {!toggleMenu && <span className="text-[#FAF2E3] font-semibold">{user?.fullName}</span>}
         </div>
         {!toggleMenu && 
